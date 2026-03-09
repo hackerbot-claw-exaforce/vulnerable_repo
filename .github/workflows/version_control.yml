@@ -1,15 +1,6 @@
-name: Auto Bump Versions
-
-on:
-  issue_comment:                                     
-    types: [created, edited]
-
-jobs:
-  add-same-version-label-to-pr:
-    runs-on: ubuntu-latest
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '/add-same-version-label')
-    steps:
-    - uses: actions/checkout@v4
-    - name: Save format request data
-      run: |
-        echo "${{ steps.pr_info.outputs.pr_head_ref }}" > ./format-request/pr_head_ref
+- name: Get changed files
+  env:
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  run: |
+    FILES=$(gh pr diff ${{ github.event.pull_request.number }} --name-only)
+    echo "$FILES"
